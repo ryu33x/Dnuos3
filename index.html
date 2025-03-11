@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sintetizador Modular</title>
+    <style>
+        body {
+            font-family: 'Orbitron', sans-serif;
+            padding: 20px;
+            background: #1a0000; /* Fondo oscuro rojizo */
+            color: #ff3333; /* Rojo claro */
+            overflow: hidden;
+        }
+        h1 {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #ff3333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(26, 0, 0, 0.8); /* Fondo oscuro con tinte rojo */
+            border: 2px solid #ff3333;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #ff0000;
+        }
+        label {
+            display: block;
+            margin: 15px 0;
+            font-weight: bold;
+            text-shadow: 0 0 5px #ff3333;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            background: #330000; /* Rojo muy oscuro */
+            border: 1px solid #ff0000;
+            color: #ff3333;
+            resize: none;
+            box-shadow: inset 0 0 10px #ff0000;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #ff0000; /* Rojo puro */
+            color: #ff9999; /* Rojo claro para contraste */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px #ff0000;
+            transition: all 0.3s;
+        }
+        button:hover:not(:disabled) {
+            background: #ff3333; /* Rojo más claro */
+            color: #ffffff;
+            box-shadow: 0 0 20px #ff3333;
+        }
+        button:disabled {
+            background: #4d0000; /* Rojo oscuro apagado */
+            color: #802626;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 10px;
+            font-style: italic;
+            text-shadow: 0 0 5px #ff3333;
+        }
+        .playing { color: #ff6666; text-shadow: 0 0 10px #ff6666; }
+        .recording { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+        .progress { margin-top: 5px; font-size: 0.9em; }
+        input[type="range"] {
+            width: 200px;
+            accent-color: #ff0000;
+        }
+        input[type="number"] {
+            width: 60px;
+            padding: 5px;
+            background: #330000;
+            border: 1px solid #ff3333;
+            color: #ff3333;
+        }
+        select {
+            padding: 5px;
+            background: #330000;
+            border: 1px solid #ff0000;
+            color: #ff3333;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <canvas id="particles"></canvas>
+    <div class="container">
+        <h1>Sintetizador Modular</h1>
+        <button id="play">Tocar</button>
+        <button id="stop">Parar</button>
+        <button id="playSong">Tocar Canción</button>
+        <button id="generatePattern">Generar Patrón</button>
+        <button id="recordDownload">Grabar y Descargar</button>
+        <div id="status" class="status">Estado: Inactivo</div>
+        <div id="progress" class="progress"></div>
+
+        <label>Frecuencia Oscilador (50-1000 Hz):
+            <input type="range" id="oscFreq" min="50" max="1000" value="220">
+            <span id="oscFreqValue">220</span> Hz
+        </label>
+        <label>Frecuencia LFO (0.1-20 Hz):
+            <input type="range" id="lfoFreq" min="0.1" max="20" step="0.1" value="5">
+            <span id="lfoFreqValue">5</span> Hz
+        </label>
+        <label>Intensidad LFO (0-1):
+            <input type="range" id="lfoGain" min="0" max="1" step="0.01" value="0.3">
+            <span id="lfoGainValue">0.3</span>
+        </label>
+        <label>Tipo de Onda:
+            <select id="waveType">
+                <option value="sine">Seno</option>
+                <option value="square">Cuadrada</option>
+                <option value="sawtooth" selected>Diente de sierra</option>
+                <option value="triangle">Triangular</option>
+            </select>
+        </label>
+        <label>Secuencia (nota,duración en seg; una por línea):
+            <textarea id="sequence" placeholder="220,0.5
+440,0.5
+330,0.25
+0,0.25"></textarea>
+        </label>
+        <label>Duración mínima del bucle (segundos):
+            <input type="number" id="minDuration" min="5" max="300" value="15">
+        </label>
+    </div>
+
+    <script src="synth.js"></script>
+</body>
+</html>
